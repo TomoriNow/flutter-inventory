@@ -4,8 +4,8 @@ class MyHomePage extends StatelessWidget {
     MyHomePage({Key? key}) : super(key: key);
 
     final List<ShopItem> items = [
-      ShopItem("View Products", Icons.checklist),
-      ShopItem("Add Product", Icons.add_shopping_cart),
+      ShopItem("View Items", Icons.checklist),
+      ShopItem("Add Item", Icons.add_shopping_cart),
       ShopItem("Logout", Icons.logout)
     ];
     
@@ -29,7 +29,7 @@ class MyHomePage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Shopping List',
+              'Flutter Inventory',
             ),
           ),
           body: SingleChildScrollView(
@@ -43,7 +43,7 @@ class MyHomePage extends StatelessWidget {
                     padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                     // Text widget to display text with center alignment and appropriate style
                     child: Text(
-                      'PBP Shop', // Text indicating the shop name
+                      'Los Pollos Hermanos', // Text indicating the shop name
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 30,
