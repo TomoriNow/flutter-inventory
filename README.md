@@ -101,3 +101,297 @@ final List<ShopItem> items = [
 Following this, I decided to update the `Widget build` method in the `MyHomePage` class within the `menu.dart` file. The method creates a `Scaffold` widget, which provides a basic app structure, including an `AppBar` with the title "Flutter Inventory" and a `body` that contains a `Column`. Inside the `Column`, there is a `Text` widget displaying the shop name ("Los Pollos Hermanos"), and below that, there is a `GridView` with a 3xN (where N is the number of rows) grid layout. The grid contains cards, each of which represents a shop item. The shop items are defined as a list of `ShopItem` objects, and the `GridView` is populated with `ShopCard` widgets, one for each shop item. When a user taps on a card, a `SnackBar` is displayed to show a message indicating which item was pressed. Note that the `Scaffold` widget is made inside the `SingeChildScrollView` widget so that when the content within it exceeds the available screen space, you can make sure users can scroll through the content to view all the whole content in the `Scaffold` widget.
 
 Next I filled the `menu.dart` file with a `ShopCard` class which was used in the `MyHomePage` class to fill in the `Scaffold` widget that has the individual shop cards. The `ShopCard` class is a stateless widget responsible for rendering the individual shop item cards. Each card is wrapped in an `InkWell` widget to make it tappable, and it displays an icon, the name of the shop item, and a background color. Other than the `ShopCard` class, the `ShopItem` class is a simple data class that represents the information about each shop item, including its name, icon, and color. Note that the `color` property inside the `Material` widget is updated from the tutorial to be `item.color` to allow each of the cards in the Flutter application to be assigned a different color.
+
+
+# PBP_Inventory | Assignment 8
+
+## Explain the difference between Navigator.push() and Navigator.pushReplacement(), accompanied by examples of the correct usage of both methods!
+
+In Flutter, both `Navigator.push()` and `Navigator.pushReplacement()` are methods used for navigating between different screens or routes in your app. However, they serve slightly different purposes. 
+
+`Navigator.push()` is used to push a new route onto the navigation stack (so that it is on top of the stack) using the `push()` method, which means adding a new screen on top of the current screen. Thus, the newly added route will appear and be displayed to the user. The previous screen remains in the navigation stack, and you can navigate back to it by popping the current route. It is typically used when you want to move to a new screen and provide a way for the user to navigate back to the previous screen. Note that `push()` adds a new route on top of existing routes, which is the key difference.
+
+Example:
+```dart
+// Inside a button click or some user interaction
+onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => SecondScreen()),
+  );
+}
+```
+
+On the other hand, `Navigator.pushReplacement()` is used to push a new route onto the navigation stack and replace the current route with the new one. The previous screen is removed from the navigation stack, so when the user presses the back button, they won't navigate back to the previous screen. Instead, they will exit the app or go to the screen that was present before the current one. It is commonly used in scenarios where you want to replace the current screen with a new one, such as after a user logs in or completes a form. Thus, the `pushReplacement()` method replaces the old route on top of the stack with a new route without altering the state of the stack elements beneath it as the key difference from `push()`
+
+Example:
+```dart
+// Inside a button click or some user interaction
+onPressed: () {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => HomeScreen()),
+  );
+}
+```
+
+## Explain each layout widget in Flutter and their respective usage contexts!
+
+1. Container: The Container widget is a versatile box model that can contain other widgets and apply decoration, padding, margins, and constraints. It is commonly used to group and style child widgets.
+
+2. Row and Column: Row and Column are flex widgets that arrange their children in a horizontal (Row) or vertical (Column) sequence. They automatically size and position their children based on the available space.
+
+3. ListView: ListView is used to create a scrollable list of widgets. It is particularly helpful when dealing with a large number of widgets that need to be displayed in a scrollable manner.
+
+4. GridView: GridView organizes its children in a 2D array, allowing for both horizontal and vertical scrolling. It's useful for creating a grid of widgets, like a photo gallery.
+
+5. Stack: The Stack widget overlays multiple children, allowing them to be positioned on top of each other. It's commonly used for creating complex layouts where widgets need to be overlaid or stacked.
+
+6. Expanded: Expanded is a flex widget that takes up the available space along the main axis within a Row, Column, or Flex. It is often used to make a child widget take up the remaining available space.
+
+7. Flexible: Similar to Expanded, the Flexible widget allows a child to take a proportionate amount of space along the main axis. However, it provides more fine-grained control over how space is distributed among multiple flexible children.
+
+8. Wrap: The Wrap widget organizes its children in multiple lines, wrapping to the next line when space is insufficient. It's useful when dealing with a dynamic number of widgets that might not fit in a single line.
+
+9. SizedBox: SizedBox is a box with a specified width and height. It's often used to add space between widgets or to set explicit dimensions.
+
+10. Card: The Card widget is a material design card. It's commonly used to present related information in a visually appealing way, with rounded corners and elevation.
+
+## List the form input elements you used in this assignment and explain why you used these input elements!
+
+### In the assignment, two widgets were utilized for the input elements:
+1. `TextFormField` 
+This is a type of widget in the form a `FormField` that contains a `TextField`. The widget is specifically used for handling text input as a string from the user when they enter the input into the `FormField` and is commonly used in forms. It is essentially also a combination of `TextField` and `Form` and also includes built-in validation formatting.
+
+2. `Form`
+The `Form` widget is a widget that acts as a container for grouping and validating multiple forms. It helps in managing input data from the user in the state of a form as well as provides methods to validate and save them in the Flutter application.
+
+
+### Input elements for each item in the form
+
+The input elements here correspond to the elements in our Django model from the previous assignments (specifically the inputs used for the form to add each item into the website/database). The reason that I utilized these input elements is that it is rather general and fits the theme of the Flutter application of Los Pollos Hermanos, a chicken shop application. Each item or menu is thus dedicated a name, price, amount, and description, which also corresponds to the django model.
+
+1. `name`: The name of the menu item
+2. `price`: The price of the menu item
+3. `amount`: The amount of the menu item in the view items page/inventory
+4. `description`: The description of each menu item in the view items page/inventory
+
+
+## How is clean architecture implemented in a Flutter application?
+
+Clean architechture is a concept that focuses on desgining software systems that are independent from any external dependencies. It essentially targets to decouple business logic from the user interface and external frameworks in order to make the application highly maintanable and testable. Therefore, it could be deduced that clean architechture aims to achieve separation of concerns in developing an application without conflicting any dependencies.
+
+In the context of Flutter, clean architecture can be implemented by dividing the application into different layers: Presentation Layer, Domain Layer, and Data Layer. Each layer has its specific responsibilities and dependencies:
+
+1. Presentation Layer (UI): Within this layer reside the components responsible for user interaction, including widgets, screens, and views. Its primary role is to manage user input and display the user interface. The presentation layer is designed to operate independently of the intricacies of business logic and data access implementation.
+
+2. Domain Layer (Business Logic): Serving as the application's core business logic, the domain layer houses crucial elements like use cases, entities, and business rules. Use cases define the operations within the application, while entities represent the fundamental objects in the domain, defining both their behavior and state. Note that the domain layer remains neutral and uninfluenced by any specific framework or technology.
+
+3. Data Layer: Tasked with data retrieval and storage, the data layer is comprised repositories and data sources. Repositories act as a bridge for accessing and manipulating data (by providing an abstraction layer), defining the contract or interface for data operations. The actual implementation of these operations occurs in data sources, which can be diverse entities like remote APIs, local databases, or other external data providers. By doing so, the data layer acts as a protective barrier, shielding the domain layer from the intricacies of data storage and retrieval.
+
+Through these different layers, the goal of separation of concerns could be achieved and thus enables unit testing of the business logic of the application in isolation (of one layer from another). Note taht you can write tests with for the Domain Layer in order to test functionalities that are important without actually needing to interact with the app's UI. This ensures a more reliable and faster way to test the application, as well as making the application's code more scalable and maintainable in the future.
+
+
+## Explain how you implemented the checklist above step-by-step! (not just following the tutorial)
+
+### 1. Creating a Menu Drawer for Navigation in the Flutter application
+
+To start creating the Menu Drawer, I firstly created a new folder called `widgets` in the `lib` directory of my project and created a new dart file called `left_drawer.dart`. In that file, I imported the necessary files into it such as the `import 'package:flutter/material.dart';` as well as the `menu.dart` and `item_form.dart` files since I will be navigating to the `MyHomePage()` and `ItemFormPage()` (or previously named the `ShopFormPage`) from the left drawer navigation. The file also contains a stateless widget with the class called `LeftDrawer` (which extends `StatelessWidget`), and has a widget that returns `Drawer()` which has a `ListView()` and some children that contain the `DrawerHeader()` widget and the `Padding()`, `Text()`, and `ListTile()` widgets for the navigation buttons. 
+
+The `DrawerHeader()` section was colored orange using `color: Colors.orange` as well as filled with text such as "Flutter Inventory" and "Write all your Menu Item needs here!" in the `Column()` widget that contains `Text()` widgets for the text. Below the `DrawerHeader()` widget, the two `ListTile()` widgets were present for the buttons that go to `MyHomePage()` and `ItemFormPage()` respectively. The first `ListTile()` button contains a `Navigator.pushReplacement()` widget which routes/directs the user to go to `MyHomePage()` whenever clicked via the `onTap` input in `ListTile()`, and this button replaces the screen display/route top of the stack with a new route to the `MyHomePage()` screen when it is clicked. The second `ListTile()` contains a button that also uses the `Navigator.pushReplacement()` method when `onTap`, but instead redirects the user to the `ItemFormPage()` as their new route. After finishing the left drawer, I added this to the `menu.dart` page by adding a `drawer` parameter of the `Scaffold()` widget using `drawer: const LeftDrawer()`.
+
+
+### 2. Creating an Item Form with Input Elements and Displaying the Data
+
+A new file in the `lib` directory called `item_form.dart` was created which had two main classes. The first class is the `ItemFormPage` which extends the `StatefulWidget`, indicating that the `ItemFormPage` can dynamically change its state, and also the `_ItemFormPageState` which extends `State<ItemFormPage>` so that it could dynamically change the state of the `ItemFormPage`. Within the `_ItemFormPageState`, I defined several class attribute variables which serve as the input fields, namely `_formKey`, `_name`, `_amount`, `_price`, `_description`. Below these input fields that I created, there was the main `Widget()` function that contained a `Scaffold()` (which replaced the `Placeholder()` in the tutorial) consisting of the `AppBar()`, `LeftDrawer()` parameter on the `AppBar()`, and a `Form()` widget that has a `Column()` widget with 4 `Padding()` widgets containing a `TextFormField()` for the name, price, amount, and description of the Menu Item for the user to input in the page. 
+
+Note that the `onChanged` and `validator` parameters were used in each of the `TextFormField()` widgets to detect whenever there is a change in the `TextFormField()` for `onChanged`, and to validate the content of `TextFormField()` and return a string using an if-statement in case of an error for `validator`. I also used `null-safety` with `String?` (to indicate that the variable can contain either a `String` or `null`) and `value!` (to indicate that the variable is guaranted not to be `null`) in the `validator` and `onChanged`. Next, I created a button as the subsequent child of the `Column()` and wrapped the button with `Padding()` and `Align()`. I made it so that this button also saves to the database using an instance of an `Item` and the `add()` method (in constrast to not saving in the tutorial) when after the popup (using the `AlertDialog` widget that displays the Name, Price, Amount, Description that the user has inputted in the form field) displays after clicking the button using the following code:
+
+```dart
+if (_formKey.currentState!.validate()) {
+    Item.add(
+    Name: _name,
+    Price: _price,
+    Amount: _amount,
+    Description: _description,
+  );
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Item successfully saved'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              Text('Name: $_name'),
+              Text('Price: $_price'),
+              Text('Amount: $_amount'),
+              Text('Description: $_description'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
+_formKey.currentState!.reset();
+}
+```
+
+### 3. Adding the Navigation to Buttons
+
+I modified the `onTap` attribute of the `InkWell` within the `ShopItem()` widget in `menu.dart` to allow the navigation to another route in the Flutter application. The button was an "AddItem" button which uses the `Navigator.push()` method (which pushes a new screen/display onto the stack in the Flutter application) that routes the user to the `ItemFormPage()` if the user wishs to add an item. 
+
+### 4. Implementing clean architecture by refactoring files
+
+I created a new file called `item_card.dart` in the `widgets` directory, and then moved all of the `ShopItem` contents from `menu.dart` into the `item_card.dart` file. Furthermore, I imported the `item_form.dart` page in the `item_card.dart` using `import 'package:flutter_inventory/screens/item_form.dart';` so that its classes could be referenced. A new folder called `screens` in the `lib` directory was also made, at which I moved the `menu.dart` and `item_form.dart` files into that folder and refactored the files so that they can have the necessary imports. Furthermore, I created a new folder called `models` in the `lib` directory to contain the `item.dart` file to indicate the model for each item to be saved into the database. This refactoring of files implements clean architecture as it separates the Presentation Layer, Domain Layer, and Data Layer. 
+
+### 5. Bonus
+
+The `item.dart` file is modified as the following where there is an `Item` class with attributes `Name`, `Price`, `Amount`, and `Description`, and the `Item` method as an `add()` which allows adding items into the database. This could be seen from `listItem.add(Item())`:
+
+```dart
+class Item {
+  static List<Item> listItem = [];
+  String Name;
+  int Price;
+  int Amount;
+  String Description;
+
+  Item({
+    required this.Name,
+    required this.Price,
+    required this.Amount,
+    required this.Description,
+  });
+
+  static void add({
+    required Name,
+    required Price,
+    required Amount,
+    required Description,
+  }) {
+    listItem.add(Item(
+      Name: Name,
+      Price: Price,
+      Amount: Amount,
+      Description: Description,
+    ));
+  }
+}
+```
+
+Next, I created a `view_item.dart` file in the `screens` directory using the following code that displays the items added from the `item_form.dart` file in a `Card()` widget containing `Padding()` with `Column()` and `Row()` for each item to be displayed:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_inventory/widgets/left_drawer.dart';
+import 'package:flutter_inventory/models/item.dart';
+
+class ViewItemPage extends StatefulWidget {
+  const ViewItemPage({super.key});
+
+  @override
+  State<ViewItemPage> createState() => _ViewItemPageState();
+}
+
+class _ViewItemPageState extends State<ViewItemPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('View Items'),
+          backgroundColor: Colors.orange,
+          foregroundColor: Colors.white,
+        ),
+        drawer: const LeftDrawer(),
+        body: SingleChildScrollView(
+            child: Align(
+          alignment: Alignment.topCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: Item.listItem.map((Item P) {
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            P.Name,
+                            style: const TextStyle(fontSize: 24.0),
+                          ),
+                          Text(
+                            "Price: ${P.Price}",
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                          Text(
+                            "Amount: ${P.Amount}",
+                            style: const TextStyle(fontSize: 16.0),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 12.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            P.Description,
+                            style: const TextStyle(fontSize: 16.0),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        )));
+  }
+}
+```
+
+I also modified the `left_drawer.dart` file to include a `ListTile()` that navigates to the `ViewItemPage()` using the following `Navigator` code:
+
+```dart
+ListTile(
+  leading: const Icon(Icons.checklist),
+  title: const Text('View Items'),
+  // redirect to ViewItemPage
+  onTap: () {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ViewItemPage(),
+      ),
+    );
+  },
+),
+```
+
+Finally, I added the "View Items" item in the `item_card.dart` file and used the `Navigator.push()` method to create a routing to the `ViewItemPage()`:
+
+```dart
+if (item.name == "View Items") {
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ViewItemPage()
+      ),
+    );
+}
+```
+
