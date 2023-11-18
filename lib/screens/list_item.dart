@@ -37,7 +37,7 @@ class _ViewItemPageState extends State<ViewItemPage> {
   Widget build(BuildContext context) {
       return Scaffold(
           appBar: AppBar(
-          title: const Text('Item'),
+          title: const Text('View Items'),
           backgroundColor: Colors.orange,
           foregroundColor: Colors.white,
           ),
@@ -61,36 +61,36 @@ class _ViewItemPageState extends State<ViewItemPage> {
                       );
                   } else {
                       return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (_, index) => Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 12),
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                      Text(
-                                      "${snapshot.data![index].fields.name}",
-                                      style: const TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                      ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text("${snapshot.data![index].fields.price}"),
-                                      const SizedBox(height: 10),
-                                      Text("${snapshot.data![index].fields.amount}"),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                          "${snapshot.data![index].fields.description}"),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                          "${snapshot.data![index].fields.productReleaseDate}")
-                                  ],
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (_, index) => Card(
+                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${snapshot.data![index].fields.name}",
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                              ));
-                      }
+                                ),
+                                const SizedBox(height: 10),
+                                Text("${snapshot.data![index].fields.price}"),
+                                const SizedBox(height: 10),
+                                Text("${snapshot.data![index].fields.amount}"),
+                                const SizedBox(height: 10),
+                                Text("${snapshot.data![index].fields.description}"),
+                                const SizedBox(height: 10),
+                                Text("${snapshot.data![index].fields.productReleaseDate}")
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
                   }
               }));
       }
