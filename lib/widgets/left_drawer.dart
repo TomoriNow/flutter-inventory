@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inventory/screens/menu.dart';
 import 'package:flutter_inventory/screens/item_form.dart';
-import 'package:flutter_inventory/screens/view_item.dart';
+import 'package:flutter_inventory/screens/list_item.dart';
 
 
 class LeftDrawer extends StatelessWidget {
@@ -47,8 +47,7 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(),
+                MaterialPageRoute(builder: (context) => MyHomePage(),
                 ),
               );
             },
@@ -60,21 +59,19 @@ class LeftDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const ItemFormPage(),
+                MaterialPageRoute(builder: (context) => const ItemFormPage(),
                 ),
               );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.checklist),
+            leading: const Icon(Icons.shopping_basket),
             title: const Text('View Items'),
             // redirect to ViewItemPage
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const ViewItemPage(),
+                MaterialPageRoute(builder: (context) => const ViewItemPage(),
                 ),
               );
             },
