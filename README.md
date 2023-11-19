@@ -395,3 +395,26 @@ if (item.name == "View Items") {
 }
 ```
 
+# PBP_Inventory | Assignment 9
+
+## Can we retrieve JSON data without creating a model first? If yes, is it better than creating a model before retrieving JSON data?
+
+
+
+## Explain the function of CookieRequest and explain why a CookieRequest instance needs to be shared with all components in a Flutter application.
+
+
+
+## Explain the mechanism of fetching data from JSON until it can be displayed on Flutter.
+
+
+
+## Explain the authentication mechanism from entering account data on Flutter to Django authentication completion and the display of menus on Flutter.
+
+
+
+## List all the widgets you used in this assignment and explain their respective functions.
+
+
+
+## Explain how you implement the checklist above step by step! (not just following the tutorial).

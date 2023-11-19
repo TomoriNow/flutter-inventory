@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter_inventory/screens/menu.dart';
+import 'package:flutter_inventory/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -10,19 +11,19 @@ void main() {
 }
 
 class LoginApp extends StatelessWidget {
-const LoginApp({super.key});
+  const LoginApp({super.key});
 
-@override
-Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Login',
-        theme: ThemeData(
-            primarySwatch: Colors.blue,
-    ),
-    home: const LoginPage(),
-    );
-    }
-}
+  @override
+  Widget build(BuildContext context) {
+      return MaterialApp(
+          title: 'Login',
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+      ),
+      home: const LoginPage(),
+      );
+      }
+  }
 
 class LoginPage extends StatefulWidget {
     const LoginPage({super.key});
@@ -41,6 +42,8 @@ class _LoginPageState extends State<LoginPage> {
         return Scaffold(
             appBar: AppBar(
                 title: const Text('Login'),
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
             ),
             body: Container(
                 padding: const EdgeInsets.all(16.0),
@@ -104,6 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: const Text('Login'),
                         ),
+                        const SizedBox(height: 8.0),
+                        Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0), // Adjust the value for your desired spacing
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RegisterPage()),
+                            );
+                          },
+                          child: const Text('Create an account'),
+                        ),
+                      ),
                     ],
                 ),
             ),
