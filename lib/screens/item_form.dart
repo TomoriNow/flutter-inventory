@@ -148,7 +148,7 @@ class _ItemFormPageState extends State<ItemFormPage> {
                             child: ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all(Colors.indigo),
+                                    MaterialStateProperty.all(Colors.red),
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {

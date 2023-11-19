@@ -3,12 +3,13 @@ import 'package:flutter_inventory/widgets/left_drawer.dart';
 import 'package:flutter_inventory/models/item.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_inventory/screens/detail_page.dart';
 
 class ViewItemPage extends StatefulWidget {
   const ViewItemPage({Key? key}) : super(key: key);
 
   @override
-  State<ViewItemPage> createState() => _ViewItemPageState();
+  _ViewItemPageState createState() => _ViewItemPageState();
 }
 
 class _ViewItemPageState extends State<ViewItemPage> {
@@ -60,32 +61,31 @@ class _ViewItemPageState extends State<ViewItemPage> {
                           ],
                       );
                   } else {
-                      return ListView.builder(
+                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (_, index) => Card(
-                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${snapshot.data![index].fields.name}",
-                                  style: const TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          // Wrap the ListTile in a GestureDetector to make it tappable
+                          child: GestureDetector(
+                            onTap: () {
+                              // Navigate to the detail page when an item is tapped
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ItemDetailPage(item: snapshot.data![index]),
                                 ),
-                                const SizedBox(height: 10),
-                                Text("${snapshot.data![index].fields.price}"),
-                                const SizedBox(height: 10),
-                                Text("${snapshot.data![index].fields.amount}"),
-                                const SizedBox(height: 10),
-                                Text("${snapshot.data![index].fields.description}"),
-                                const SizedBox(height: 10),
-                                Text("${snapshot.data![index].fields.productReleaseDate}")
-                              ],
+                              );
+                            },
+                            child: ListTile(
+                              title: Text(
+                                "${snapshot.data![index].fields.name}",
+                                style: const TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text("Price: ${snapshot.data![index].fields.price} \nAmount: ${snapshot.data![index].fields.amount} \nDescription: ${snapshot.data![index].fields.description}"),
                             ),
                           ),
                         ),
