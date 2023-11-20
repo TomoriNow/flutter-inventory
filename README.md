@@ -445,6 +445,66 @@ Throughout this process, secure communication practices, such as HTTPS, should b
 
 ## List all the widgets you used in this assignment and explain their respective functions.
 
+In this assignment, most of the Flutter widgets are nearly the same with Assignment 8, however, there are new widgets used in the `login.dart`, `detail_page.dart`, `register.dart`, `main.dart`, and `list_item.dart`. Therefore, I will only be going over on all the new widgets used in this assignment.
 
+### main.dart
+
+1. Provider: This widget comes from the Provider package, which is used for state management in Flutter. It allows you to provide a value (in this case, an instance of CookieRequest) to the entire widget tree. This is often used for dependency injection, making the provided value accessible to any widget that needs it.
+
+2. LoginPage (Stateless Widget): This is a widget representing the home screen of the application where users are required to log in with their username and password. Being a stateless widget, it means that the properties of this widget cannot change once it is created.
+
+3. CookieRequest: It is a custom class that is instantiated and provided from the `pbp_django_auth` package. This class is used to make HTTP requests or managing cookies in the application.
+
+### login.dart
+
+1. LoginPage (Stateless Widget): This is the main application widget, representing the entire Flutter application for the login page. It is a stateless widget, meaning its properties cannot change once it is instantiated. The build method returns the root widget of the application.
+
+2. LoginPage (StatefulWidget): This is a stateful widget representing the login page of the application. It has a corresponding state class (_LoginPageState) that holds mutable properties (meaning it can change state dynamically due to external events as well as due to changes in the input from the user).
+
+3. SizedBox: SizedBox is a box model widget that forces its child to have a specific width, height, or both. In this code, it is used to add vertical spacing between the text fields and buttons.
+
+4. ElevatedButton: ElevatedButton is a material design button that includes an elevation effect when pressed. It is used for the login button and the "Create an account" button.
+
+5. AlertDialog: AlertDialog is a material design dialog that displays alert messages to the user. It is used to show a dialog in case of a failed login attempt.
+
+6. Navigator: Navigator is a widget that manages a stack of route objects and provides methods for managing the stack, such as pushing a new route onto the stack.
+
+7. RegisterPage: A page for user registration. It is navigated to when the "Create an account" button is pressed.
+
+8. Provider: This widget comes from the Provider package, used for state management in Flutter. It is used to obtain the `CookieRequest` instance from the widget tree, allowing the login functionality to make HTTP requests.
+
+9. CookieRequest: It is a custom class that handles cookie-based authentication. The login method is used to send login requests.
+
+### detail_page.dart
+
+1. ItemDetailPage (StatelessWidget): This is a stateless widget representing the page that displays details of a specific item. It takes an Item object as a parameter and displays its details.
+
+2. Center: Center is a widget that centers its child within the parent. In this code, it centers the Card widget containing the item details.
+
+3. Card: Card is a material design widget that represents a card. It can have rounded corners, shadows, and other styling options. In this code, it is used to display the item details with elevation, rounded corners, and padding.
+
+4. SizedBox: SizedBox is a box model widget that forces its child to have a specific width, height, or both. In this code, it is used to add vertical spacing between different Text widgets.
+
+5. FloatingActionButton: FloatingActionButton is a material design floating action button. In this code, it is used to provide a button that, when pressed, navigates back to the previous page (item list page) using `Navigator.pop()`.
+
+6. Icon: Icon is a widget that displays a material design icon. In this code, it is used as the child of the FloatingActionButton to display an arrow-back icon.
+
+7. Column: Column is a widget that arranges its children in a vertical array. In this code, it is used to stack the various Text widgets vertically, displaying different details of the item.
+
+### list_item.dart
+
+1. ViewItemPage (StatefulWidget): This is a stateful widget representing the page that displays a list of items when a user is logged into the Flutter app. It includes a FutureBuilder to handle asynchronous data fetching and display loading indicators or the fetched data accordingly.
+
+2. FutureBuilder: FutureBuilder is a widget that simplifies the process of working with futures. It takes a Future (which refers to an object that represents a value that is not yet available but will be at some point in the future) and a callback function that builds the widget tree based on the future's state (loading, error, or data available). In this code, it is used to fetch a list of items asynchronously and build the UI accordingly.
+
+3. fetchItem (Function): Although not a widget, this is A function that performs an HTTP GET request to a specified URL to the local host ('http://127.0.0.1:8000/json/'), retrieves JSON data, decodes it, and converts it into a list of Item objects.
+
+4. ListView.builder: ListView.builder is a lazily-loaded (a technique used to load only necessary items into a ListView as the user scrolls, rather than loading all items at once to improve performance) widget for efficiently building a scrolling, finite list of widgets. It is used here to create a scrollable list of items fetched from the server.
+
+5. Card: Card is a material design widget that represents a card. It can have rounded corners, shadows, and other styling options. In this code, it is used to wrap each item in the list.
+
+6. GestureDetector: GestureDetector is a widget that detects gestures made by the user. In this code, it wraps the ListTile to make the entire item tappable.
+
+7. ListTile: ListTile is a material design list tile that represents a single fixed-height row. It is used to display each item's name, price, amount, and description. When tapped, it navigates to the detailed view of the item.
 
 ## Explain how you implement the checklist above step by step! (not just following the tutorial).
