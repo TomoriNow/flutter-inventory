@@ -445,7 +445,7 @@ Throughout this process, secure communication practices, such as HTTPS, should b
 
 ## List all the widgets you used in this assignment and explain their respective functions.
 
-In this assignment, most of the Flutter widgets are nearly the same with Assignment 8, however, there are new widgets used in the `login.dart`, `detail_page.dart`, `register.dart`, `main.dart`, and `list_item.dart`. Therefore, I will only be going over on all the new widgets used in this assignment.
+In this assignment, most of the Flutter widgets are nearly the same with Assignment 8, however, there are new widgets used in the `login.dart`, `detail_page.dart`, `register.dart`, `main.dart`, `item_form.dart`, and `list_item.dart`. Therefore, I will only be going over on all the new widgets used in this assignment.
 
 ### main.dart
 
@@ -507,4 +507,23 @@ In this assignment, most of the Flutter widgets are nearly the same with Assignm
 
 7. ListTile: ListTile is a material design list tile that represents a single fixed-height row. It is used to display each item's name, price, amount, and description. When tapped, it navigates to the detailed view of the item.
 
+### item_form.dart
+
+1. ItemFormPage (StatefulWidget): This is a stateful widget representing a form for adding a new item. It includes form fields for entering item details like name, price, amount, description, and a button to save the form.
+
+2. GlobalKey<FormState>: A key that uniquely identifies the Form widget and allows for interacting with its state.
+
+3. TextFormField: TextFormField is a material design widget for entering and editing text. It is used for each input field (item name, price, amount, description) in the form. It includes various parameters for customization, such as decoration, onChanged, and validator.
+
+4. Align: Align is a widget that aligns a child within its parent. In this code, it is used to align the Save button to the bottom center of the screen.
+
+5. ElevatedButton: ElevatedButton is a material design button widget with an elevated appearance. It is used as the Save button in the form. It triggers form validation and, if successful, sends a POST request to save the new item on the server.
+
+6. ButtonStyle: ButtonStyle is used to customize the appearance of the ElevatedButton, changing its background color.
+
+7. BuildContext: The context parameter used in various places is the build context, which provides information about the location in the widget tree.
+
+8. CookieRequest: It is a custom class that is instantiated and provided from the `pbp_django_auth` package. This class is used to make HTTP requests or managing cookies in the application.
+
 ## Explain how you implement the checklist above step by step! (not just following the tutorial).
+
