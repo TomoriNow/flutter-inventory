@@ -527,3 +527,133 @@ In this assignment, most of the Flutter widgets are nearly the same with Assignm
 
 ## Explain how you implement the checklist above step by step! (not just following the tutorial).
 
+###  Create a login page in the Flutter project.
+
+I started making the login page in the Flutter project by creating a file called `login.dart` in the `screens` directory of my project. There, I filled the `login.dart` file firstly with the necessary imports that include importing `menu.dart`, `register.dart`, `material.dart` package, as well as the new package imports which are `pbp_django_auth.dart` and `provider.dart`. Next, I made a `main` function which runs the `LoginApp` I created next as a class that extends the `StatelessWidget`. Just like the `main.dart` file previously, the `LoginApp` returns a `MaterialApp` widget which is the root of all widgets in the login page for the Flutter application. Afterwards, I created a `LoginPage` class that extends the `StatefulWidget` since the `LoginPage` is meant to take input from the user from its fields, so it must have a state and is able to dynamically. 
+
+The fields are defined in the `_LoginPageState` class which extends the state of the `LoginPage`, and has the `_usernameController` and `_passwordController` variables which are assigned to the `TextEditingController` widget so that they can take text input from the user which could be edited. Below this is a `Widget build` which has the `AppBar`, `Container`, and 2 `TextField` widgets to take input from the user, where each of the `TextField` has their respective controller parameters defined earlier for the username and password. To save the form in the login page, I used an `ElevatedButton` widget that when `onPressed`, it asynchronously awaits the request from the Django backend localhost server for the username and password so that the user could log in. If the user is logged, they are routed to `MyHomePage` using the `Navigator.pushReplacement` methodm, and a `SnackBar` will pop up to show that they are logged in. Else, (when login fails), a dialog will appear saying that "Login Failed" using the `showDialog` and `AlertDialog` widgets, and there is an "OK" button, when pressed it will close the dialog; this is made possible using `Navigator.pop`.
+
+###  Integrate the Django authentication system with the Flutter project.
+Before starting, I opened my Flutter project and installed the necessary packages required for the authentication system which are `pbp_django_auth` and `provider`; these are installed as such in the command terminal:
+
+```
+flutter pub add provider
+flutter pub add pbp_django_auth
+```
+
+To integrate the Django authentication system with the Flutter project, I first created a `django-app` named `authentication` in my previous Django inventory project using `python manage.py startapp authentication` in the command terminal. I then added `authentication` into the `INSTALLED_APPS` in the `settings.py` file of my Django application. Following this, I ran `pip install django-cors-headers` in the command terminal and also added `corsheaders` to `INSTALLED_APPS` as well as `corsheaders.middleware.CorsMiddleware` to `MIDDLEWARE` in `settings.py` so then the authentication system could work in the backend. I also filled `settings.py` with the following code to use the new `django-cors-headers` library I have installed:
+
+```py
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+```
+
+Next, I went into the `views.py` file in the `authentication` app to create 2 new functions of for logging in and logging out. They are defined as such after importing the necessary packages:
+
+```py
+# Create your views here.
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login as auth_login
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.models import User
+
+@csrf_exempt
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            auth_login(request, user)
+            # Successful login status.
+            return JsonResponse({
+                "username": user.username,
+                "status": True,
+                "message": "Login successful!"
+                # Add other data if you want to send data to Flutter.
+            }, status=200)
+        else:
+            return JsonResponse({
+                "status": False,
+                "message": "Login failed, account disabled."
+            }, status=401)
+
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "Login failed, check email or password again."
+        }, status=401)
+        
+@csrf_exempt
+def logout(request):
+    username = request.user.username
+
+    try:
+        auth_logout(request)
+        return JsonResponse({
+            "username": username,
+            "status": True,
+            "message": "Logged out successfully!"
+        }, status=200)
+    except:
+        return JsonResponse({
+        "status": False,
+        "message": "Logout failed."
+        }, status=401)
+```
+
+Note that both the `login` and `logout` functions use the `JsonResponse` import since Flutter is able to process `JSON` requests and responses that could be parsed and decoded either using the `pbp_django_auth`, `provider`, or the `http` package imports. After making these functions in `authentication/views.py`, I routed them to `authentication/urls.py` as the following:
+
+```py
+from django.urls import path
+from authentication.views import login, logout, register
+
+app_name = 'authentication'
+
+urlpatterns = [
+    path('login/', login, name='login'),
+    path('logout/', logout, name='logout'),
+    path('register/', register, name='register'),
+]
+```
+
+Note that I also modified the `urls.py` in `UnderArmour_Curry_Inventory\urls.py` to include the route to the authentication app for this to work in the Django backend:
+
+```py
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('__reload__/', include('django_browser_reload.urls')),
+    path('', include('main.urls')),
+    path('auth/', include('authentication.urls')),
+]
+```
+
+###  Create a custom model according to your Django application project.
+
+The custom model was created using the `Quicktype` website that was specified in the tutorial. First, I started the local server of my Django project using `python manage.py runserver`, and then went to the url `http://localhost:8000/json/` to open the `JSON` endpoint for the web application. I then copied the `JSON` data (which is in the form of name-value pairs) and pasted it on the `Quicktype` website. On the website, I changed the setup name to `Item` according to my model, the source type to `JSON`, and the language to `Dart`. Next, I pasted the `JSON` data I copied from my Django project and pasted it into `Quicktype`, and then copied the resulting code from `Quicktype` using `Copy Code`. Following this, I created a new folder in my Flutter project called `models` in `lib/models`, and made a file called `item.dart`. I pasted the code I copied from `Quicktype` into `item.dart`; this code represent the `Item` model that is from my Django project into a `Dart` custom model.
+
+###  Create a page containing a list of all items available at the JSON endpoint in Django that you have deployed.
+
+First, I created a file in the `screens` directory called `list_item.dart` for the page containing a list of all items available at the JSON endpoint in my Django project. Then, I first imported the necessary packages needed for the file which include Flutter's material library for building UI components (flutter/material.dart), a custom left drawer widget (left_drawer.dart), the Item model (item.dart), the HTTP package (http.dart) for making network requests, and a screen for displaying detailed information about an item (detail_page.dart).
+
+The main functionality of `list_item.dart` is within the ViewItemPage class, which is a StatefulWidget. It has a corresponding state class, _ViewItemPageState, where the logic for fetching and displaying items is implemented. Within the _ViewItemPageState class, there's a fetchItem() method responsible for making an asynchronous HTTP GET request to a specified URL (http://127.0.0.1:8000/json/). The response is then decoded from JSON using `jsonDecode`, and the data is converted into a list of Item objects. The Item class represents the structure of items obtained from the API, and its construction involves parsing the decoded JSON. The build method of _ViewItemPageState returns a Scaffold widget, which serves as the fundamental structure of the application page. It includes an AppBar for the page title ("View Items"), a left drawer (LeftDrawer), and a FutureBuilder. The latter is a Flutter widget used for handling asynchronous operations. In this context, it manages the asynchronous fetching of items from the API.
+
+The FutureBuilder checks the state of the asynchronous operation and conditionally renders different UI components based on whether the data is still loading, not available, or successfully loaded. If the data is not yet available, a loading spinner is displayed. If there is an issue or no items are retrieved, a message indicating the absence of item data is shown. If the data is successfully loaded, a ListView.builder is employed to dynamically construct a scrollable list of Card widgets. Each Card represents an item and is tappable. Tapping on an item triggers navigation to the ItemDetailPage, where more detailed information about the selected item is displayed.
+
+###  Create a detail page for each item listed on the Item list page.
+
+To display each item listen on `list_item.dart` I created `detail_page.dart` in the `screens` directory of the project. I created a class called `ItemDetailPage` as the main widget of the file. This widget is responsible for displaying detailed information about a specific item. The ItemDetailPage is a StatelessWidget, indicating that it does not have a state and its UI is purely based on the input parameters it receives during construction.
+
+The class takes an Item object as a required parameter in its constructor. This Item object represents a model for items and contains various fields such as name, price, amount, description, and product release date according to the model defined in the Django project and in `item.dart` as the Dart custom model called `Item`. The build method of the ItemDetailPage returns a Scaffold widget, which provides the basic structure of the page. It includes an AppBar with a title ("Item Details") and styling for the app bar's background and foreground colors.
+
+The body of the Scaffold contains a Center widget, within which there is a Card widget. The Card is styled with elevation (adding a shadow), rounded corners, and margin. Inside the Card, a Padding widget is used to add padding around its content. Within the Padding, a Column widget is employed to arrange multiple Text widgets vertically, displaying various details about the item. Each Text widget presents a specific piece of information, such as the item's name, price, amount, description, and product release date. The text styles are defined using the TextStyle class, specifying the font size and weight.
+
+A floatingActionButton is included at the bottom of the Scaffold, represented by a FloatingActionButton widget. This button includes an onPressed callback that uses the `Navigator.pop` method to navigate back to the previous page, which is the item list page. The button displays an arrow back icon as its child.
+
+
