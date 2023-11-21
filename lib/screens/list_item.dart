@@ -3,7 +3,6 @@ import 'package:flutter_inventory/widgets/left_drawer.dart';
 import 'package:flutter_inventory/models/item.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 import 'package:flutter_inventory/screens/detail_page.dart';
 
 class ViewItemPage extends StatefulWidget {
