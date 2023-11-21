@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inventory/widgets/left_drawer.dart';
 import 'package:flutter_inventory/models/item.dart';
-import 'package:http/http.dart' as http;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:flutter_inventory/screens/detail_page.dart';
 
@@ -14,19 +15,12 @@ class ViewItemPage extends StatefulWidget {
 
 class _ViewItemPageState extends State<ViewItemPage> {
   Future<List<Item>> fetchItem() async {
-      var url = Uri.parse(
-          'http://127.0.0.1:8000/json/');
-      var response = await http.get(
-          url,
-          headers: {"Content-Type": "application/json"},
-      );
-
-      // decode the response to JSON
-      var data = jsonDecode(utf8.decode(response.bodyBytes));
+      final request = context.watch<CookieRequest>();
+      final response = await request.get('http://127.0.0.1:8000/json/');
 
       // convert the JSON to Item object
       List<Item> list_item = [];
-      for (var d in data) {
+      for (var d in response) {
           if (d != null) {
               list_item.add(Item.fromJson(d));
           }
